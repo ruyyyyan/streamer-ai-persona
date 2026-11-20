@@ -23,7 +23,10 @@ class StreamerPipeline:
         char_conf = self.config_loader.get_character_config(character_id)
 
         # 1. LLM Generation
-        agent = PersonaAgent(system_prompt=char_conf["system_prompt"])
+        agent = PersonaAgent(
+            system_prompt=char_conf["system_prompt"],
+            character_id=character_id
+        )
         reply_text = agent.chat(user_message)
 
         # 2. TTS Audio Synthesis
