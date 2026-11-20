@@ -11,8 +11,24 @@ char_dict = {
 }
 
 
+def normalize_history(chat_history):
+    clean = []
+    if not chat_history:
+        return clean
+    for item in chat_history:
+        if isinstance(item, dict) and "role" in item and "content" in item:
+            clean.append(item)
+        elif isinstance(item, (list, tuple)) and len(item) == 2:
+            u, b = item
+            if u:
+                clean.append({"role": "user", "content": str(u)})
+            if b:
+                clean.append({"role": "assistant", "content": str(b)})
+    return clean
+
+
 def respond(character_display: str, message: str, generate_video: bool, chat_history):
-    chat_history = chat_history or []
+    chat_history = normalize_history(chat_history)
     if not message or not message.strip():
         return chat_history, None, None, ""
 
