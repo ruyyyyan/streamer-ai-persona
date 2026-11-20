@@ -1,0 +1,39 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Model Weights and Checkpoints (Large files > 100MB)
+models/
+checkpoints/
+*.pth
+*.pt
+*.ckpt
+*.onnx
+*.safetensors
+*.bin
+
+# User Data and Audio/Video Outputs
+outputs/
+data/raw_audio/
+data/processed_audio/
+*.wav
+*.mp3
+*.mp4
+*.flac
+
+# IDE / OS specific files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Environment variables & secrets
+.env
+*.local

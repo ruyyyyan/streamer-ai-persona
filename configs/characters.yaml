@@ -1,0 +1,20 @@
+default_character: "gaming_streamer"
+
+characters:
+  gaming_streamer:
+    display_name: "热血电竞主播 (模板)"
+    prompt_file: "configs/prompts/gaming_streamer.txt"
+    voice_type: "edge-tts"
+    voice_id: "zh-CN-YunxiNeural"
+    avatar_image: "data/characters/default_avatar.png"
+    tts_api_url: "http://127.0.0.1:9880"
+    liveportrait_api_url: "http://127.0.0.1:8890"
+
+  humor_commentator:
+    display_name: "幽默解说员 (模板)"
+    prompt_file: "configs/prompts/humor_commentator.txt"
+    voice_type: "edge-tts"
+    voice_id: "zh-CN-YunjianNeural"
+    avatar_image: "data/characters/default_avatar.png"
+    tts_api_url: "http://127.0.0.1:9880"
+    liveportrait_api_url: "http://127.0.0.1:8890"
