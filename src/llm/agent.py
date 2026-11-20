@@ -12,12 +12,12 @@ class PersonaAgent:
         system_prompt: str,
         api_key: Optional[str] = None,
         base_url: Optional[str] = None,
-        model_name: str = "gpt-3.5-turbo"
+        model_name: Optional[str] = None
     ):
         self.system_prompt = system_prompt
         self.api_key = api_key or os.getenv("OPENAI_API_KEY", "")
         self.base_url = base_url or os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1")
-        self.model_name = model_name
+        self.model_name = model_name or os.getenv("OPENAI_MODEL_NAME", "gpt-3.5-turbo")
 
         self.client = None
         if self.api_key:

@@ -7,9 +7,22 @@ import yaml
 class ConfigLoader:
     def __init__(self, config_path: str = "configs/characters.yaml"):
         self.base_dir = Path(__file__).resolve().parent.parent
+        self._load_env()
         self.config_path = Path(config_path)
         if not self.config_path.is_absolute():
             self.config_path = self.base_dir / self.config_path
+
+    def _load_env(self):
+        env_file = self.base_dir / ".env"
+        if env_file.exists():
+            with open(env_file, "r", encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith("#") and "=" in line:
+                        k, v = line.split("=", 1)
+                        k = k.strip()
+                        v = v.strip().strip("'\"")
+                        os.environ[k] = v
 
     def load_config(self) -> Dict[str, Any]:
         if not self.config_path.exists():
