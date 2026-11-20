@@ -12,14 +12,17 @@ char_dict = {
 
 
 def respond(character_display: str, message: str, generate_video: bool, chat_history):
-    if not message.strip():
-        return chat_history, None, None
+    chat_history = chat_history or []
+    if not message or not message.strip():
+        return chat_history, None, None, ""
 
-    char_id = char_dict.get(character_display, "gaming_streamer")
+    char_id = char_dict.get(character_display, "xuanshen")
     result = pipeline.run(char_id, message, generate_video=generate_video)
 
-    chat_history.append((message, result["reply_text"]))
-    return chat_history, result["audio_path"], result["video_path"]
+    # Gradio 5/6+ requires messages format (list of dicts with role and content)
+    chat_history.append({"role": "user", "content": message})
+    chat_history.append({"role": "assistant", "content": result["reply_text"]})
+    return chat_history, result["audio_path"], result["video_path"], ""
 
 
 with gr.Blocks(title="AI 虚拟主播对话工作流") as demo:
@@ -49,12 +52,12 @@ with gr.Blocks(title="AI 虚拟主播对话工作流") as demo:
     send_btn.click(
         respond,
         inputs=[char_selector, msg_input, video_checkbox, chatbot],
-        outputs=[chatbot, audio_output, video_output]
+        outputs=[chatbot, audio_output, video_output, msg_input]
     )
     msg_input.submit(
         respond,
         inputs=[char_selector, msg_input, video_checkbox, chatbot],
-        outputs=[chatbot, audio_output, video_output]
+        outputs=[chatbot, audio_output, video_output, msg_input]
     )
 
 if __name__ == "__main__":
