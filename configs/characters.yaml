@@ -11,6 +11,26 @@ characters:
     tts_api_url: "http://127.0.0.1:9880"
     liveportrait_api_url: "http://127.0.0.1:8890"
 
+  diangun:
+    display_name: "电棍 (otto - 成品音色)"
+    prompt_file: "configs/prompts/otto.txt"
+    voice_type: "gpt-sovits"
+    voice_id: "otto"
+    model_dir: "models/diangun"
+    avatar_image: "data/characters/default_avatar.png"
+    tts_api_url: "http://127.0.0.1:9880"
+    liveportrait_api_url: "http://127.0.0.1:8890"
+
+  shanniruo:
+    display_name: "山泥若 (ShinyRuo - 少样本音色)"
+    prompt_file: "configs/prompts/shinyruo.txt"
+    voice_type: "gpt-sovits"
+    voice_id: "shanniruo"
+    model_dir: "models/shanniruo"
+    avatar_image: "data/characters/default_avatar.png"
+    tts_api_url: "http://127.0.0.1:9880"
+    liveportrait_api_url: "http://127.0.0.1:8890"
+
   gaming_streamer:
     display_name: "热血电竞主播 (模板)"
     prompt_file: "configs/prompts/gaming_streamer.txt"
