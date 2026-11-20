@@ -6,8 +6,10 @@ import yaml
 
 class ConfigLoader:
     def __init__(self, config_path: str = "configs/characters.yaml"):
+        self.base_dir = Path(__file__).resolve().parent.parent
         self.config_path = Path(config_path)
-        self.base_dir = self.config_path.parent.parent
+        if not self.config_path.is_absolute():
+            self.config_path = self.base_dir / self.config_path
 
     def load_config(self) -> Dict[str, Any]:
         if not self.config_path.exists():

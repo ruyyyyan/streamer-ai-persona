@@ -1,7 +1,5 @@
 import os
 from typing import List, Dict, Optional
-from openai import OpenAI
-
 
 class PersonaAgent:
     """
@@ -23,7 +21,11 @@ class PersonaAgent:
 
         self.client = None
         if self.api_key:
-            self.client = OpenAI(api_key=self.api_key, base_url=self.base_url)
+            try:
+                from openai import OpenAI
+                self.client = OpenAI(api_key=self.api_key, base_url=self.base_url)
+            except ImportError:
+                print("[PersonaAgent] openai 模块未安装，将使用离线模拟模式。")
 
     def chat(self, user_message: str, history: Optional[List[Dict[str, str]]] = None) -> str:
         messages = [{"role": "system", "content": self.system_prompt}]

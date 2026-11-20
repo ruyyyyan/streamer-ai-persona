@@ -45,7 +45,11 @@ class VoiceClient:
 
         # Fallback to edge-tts
         try:
-            asyncio.run(self._synthesize_edge_tts(text, output_path))
+            # If voice_id is a custom model name, use standard neural voice for edge-tts
+            edge_voice = self.voice_id if self.voice_id.startswith("zh-") else "zh-CN-YunxiNeural"
+            import edge_tts
+            communicate = edge_tts.Communicate(text, edge_voice)
+            asyncio.run(communicate.save(output_path))
         except Exception as e:
             print(f"[VoiceClient] Edge-TTS error: {e}")
             # Create an empty or silent indicator if completely offline

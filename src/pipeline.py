@@ -28,7 +28,9 @@ class StreamerPipeline:
 
         # 2. TTS Audio Synthesis
         timestamp = int(time.time())
-        audio_filename = f"outputs/audio_{character_id}_{timestamp}.mp3"
+        outputs_dir = self.config_loader.base_dir / "outputs"
+        outputs_dir.mkdir(parents=True, exist_ok=True)
+        audio_filename = str(outputs_dir / f"audio_{character_id}_{timestamp}.mp3")
         voice_client = VoiceClient(
             voice_type=char_conf.get("voice_type", "edge-tts"),
             voice_id=char_conf.get("voice_id", "zh-CN-YunxiNeural"),

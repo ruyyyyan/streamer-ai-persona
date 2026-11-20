@@ -1,6 +1,16 @@
-default_character: "gaming_streamer"
+default_character: "xuanshen"
 
 characters:
+  xuanshen:
+    display_name: "炫神 (XuanShen - 成品音色)"
+    prompt_file: "configs/prompts/xuanshen.txt"
+    voice_type: "gpt-sovits"
+    voice_id: "XuanShen"
+    model_dir: "models/xuanshen"
+    avatar_image: "data/characters/default_avatar.png"
+    tts_api_url: "http://127.0.0.1:9880"
+    liveportrait_api_url: "http://127.0.0.1:8890"
+
   gaming_streamer:
     display_name: "热血电竞主播 (模板)"
     prompt_file: "configs/prompts/gaming_streamer.txt"
