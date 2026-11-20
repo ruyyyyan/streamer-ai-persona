@@ -30,11 +30,16 @@ class StreamerPipeline:
         timestamp = int(time.time())
         outputs_dir = self.config_loader.base_dir / "outputs"
         outputs_dir.mkdir(parents=True, exist_ok=True)
-        audio_filename = str(outputs_dir / f"audio_{character_id}_{timestamp}.mp3")
+        audio_filename = str(outputs_dir / f"audio_{character_id}_{timestamp}.wav")
+        
+        model_dir_rel = char_conf.get("model_dir")
+        model_dir_abs = (self.config_loader.base_dir / model_dir_rel) if model_dir_rel else None
+
         voice_client = VoiceClient(
             voice_type=char_conf.get("voice_type", "edge-tts"),
             voice_id=char_conf.get("voice_id", "zh-CN-YunxiNeural"),
-            api_url=char_conf.get("tts_api_url")
+            api_url=char_conf.get("tts_api_url"),
+            model_dir=str(model_dir_abs) if model_dir_abs else None
         )
         audio_path = voice_client.synthesize(reply_text, audio_filename)
 
