@@ -1,4 +1,5 @@
 import os
+import time
 import json
 import asyncio
 import requests
@@ -9,12 +10,12 @@ from typing import Optional
 
 class VoiceClient:
     """
-    Synthesizes speech using edge-tts (fallback) or a local GPT-SoVITS v2 API.
+    Synthesizes speech using local GPT-SoVITS v2 API (primary) or edge-tts (fallback).
     """
 
     def __init__(
         self,
-        voice_type: str = "edge-tts",
+        voice_type: str = "gpt-sovits",
         voice_id: str = "zh-CN-YunxiNeural",
         api_url: Optional[str] = None,
         model_dir: Optional[str] = None
@@ -31,20 +32,34 @@ class VoiceClient:
         await communicate.save(output_path)
 
     def _setup_gpt_sovits_model(self):
-        """Loads specific GPT and SoVITS weights into the active API service."""
+        """Loads specific GPT and SoVITS weights into the active API service with warm-up retry."""
         if not self.model_dir or not self.model_dir.exists():
             return
 
         gpt_path = self.model_dir / "gpt.ckpt"
         sovits_path = self.model_dir / "sovits.pth"
 
-        if gpt_path.exists():
-            url = f"{self.api_url}/set_gpt_weights?weights_path={urllib.parse.quote(str(gpt_path.resolve()))}"
-            requests.get(url, timeout=30)
+        # Retry loop to gracefully handle GPT-SoVITS model loading delays on service startup
+        for attempt in range(15):
+            try:
+                if gpt_path.exists():
+                    url = f"{self.api_url}/set_gpt_weights?weights_path={urllib.parse.quote(str(gpt_path.resolve()))}"
+                    r = requests.get(url, timeout=30)
+                    if r.status_code != 200:
+                        raise RuntimeError(f"set_gpt_weights returned {r.status_code}: {r.text}")
 
-        if sovits_path.exists():
-            url = f"{self.api_url}/set_sovits_weights?weights_path={urllib.parse.quote(str(sovits_path.resolve()))}"
-            requests.get(url, timeout=30)
+                if sovits_path.exists():
+                    url = f"{self.api_url}/set_sovits_weights?weights_path={urllib.parse.quote(str(sovits_path.resolve()))}"
+                    r = requests.get(url, timeout=30)
+                    if r.status_code != 200:
+                        raise RuntimeError(f"set_sovits_weights returned {r.status_code}: {r.text}")
+                return
+            except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as e:
+                if attempt < 14:
+                    print(f"[VoiceClient] GPT-SoVITS 后端加载中 (第 {attempt+1}/15 次重试)...")
+                    time.sleep(2)
+                else:
+                    raise e
 
     def _synthesize_gpt_sovits(self, text: str, output_path: str):
         # 1. Switch weights if custom character weights exist
@@ -94,9 +109,9 @@ class VoiceClient:
                 self._synthesize_gpt_sovits(text, output_path)
                 return output_path
             except Exception as e:
-                print(f"[VoiceClient] GPT-SoVITS failed ({e}), falling back to edge-tts.")
+                print(f"[VoiceClient] GPT-SoVITS 深度模型生成失败: {e}，正在降级尝试兜底方案。")
 
-        # Fallback to edge-tts
+        # Fallback to edge-tts if explicitly configured or critical failure
         try:
             asyncio.run(self._synthesize_edge_tts(text, output_path))
         except Exception as e:

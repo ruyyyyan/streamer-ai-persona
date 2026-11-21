@@ -2,7 +2,7 @@ default_character: "xuanshen"
 
 characters:
   xuanshen:
-    display_name: "炫神 (XuanShen - 成品音色)"
+    display_name: "炫神 (XuanShen - 专属声线)"
     prompt_file: "configs/prompts/xuanshen.txt"
     voice_type: "gpt-sovits"
     voice_id: "XuanShen"
@@ -12,7 +12,7 @@ characters:
     liveportrait_api_url: "http://127.0.0.1:8890"
 
   diangun:
-    display_name: "电棍 (otto - 成品音色)"
+    display_name: "电棍 (otto - 专属声线)"
     prompt_file: "configs/prompts/otto.txt"
     voice_type: "gpt-sovits"
     voice_id: "otto"
@@ -22,29 +22,11 @@ characters:
     liveportrait_api_url: "http://127.0.0.1:8890"
 
   shanniruo:
-    display_name: "山泥若 (ShinyRuo - 少样本音色)"
+    display_name: "山泥若 (ShinyRuo - 专属声线)"
     prompt_file: "configs/prompts/shinyruo.txt"
     voice_type: "gpt-sovits"
     voice_id: "shanniruo"
     model_dir: "models/shanniruo"
-    avatar_image: "data/characters/default_avatar.png"
-    tts_api_url: "http://127.0.0.1:9880"
-    liveportrait_api_url: "http://127.0.0.1:8890"
-
-  gaming_streamer:
-    display_name: "热血电竞主播 (模板)"
-    prompt_file: "configs/prompts/gaming_streamer.txt"
-    voice_type: "edge-tts"
-    voice_id: "zh-CN-YunxiNeural"
-    avatar_image: "data/characters/default_avatar.png"
-    tts_api_url: "http://127.0.0.1:9880"
-    liveportrait_api_url: "http://127.0.0.1:8890"
-
-  humor_commentator:
-    display_name: "幽默解说员 (模板)"
-    prompt_file: "configs/prompts/humor_commentator.txt"
-    voice_type: "edge-tts"
-    voice_id: "zh-CN-YunjianNeural"
     avatar_image: "data/characters/default_avatar.png"
     tts_api_url: "http://127.0.0.1:9880"
     liveportrait_api_url: "http://127.0.0.1:8890"
